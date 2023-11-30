@@ -7,7 +7,10 @@ type Child = {
 
 const SvgLoadButton = ({ children }: Child) => {
     return (
-        <Button variant='text'>
+        <Button
+            variant="contained"
+            className="bg-base-gray rounded-md"
+        >
             {children}
         </Button>
     )
