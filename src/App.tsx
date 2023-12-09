@@ -7,9 +7,9 @@ function App() {
   const [fileContent, setFileContent] = useState<string>('')
 
   function RenderSvg(props: { svg: string }) {
-    return React.createElement('svg', {
+    return React.createElement('div', {
       dangerouslySetInnerHTML: { __html: props.svg },
-      style: { width: '500px', height: '500px' }
+      style: { width: '500px', height: '500px', justifyContent: 'center' }
     });
   }
 
@@ -20,7 +20,7 @@ function App() {
 
   return (
     <div className='base-position'>
-      <Grid container spacing={3}>
+      <Grid container spacing={2}>
         <Grid xs={12}>
           <SvgLoadButton
             setFileContent={setFileContent}>
@@ -38,13 +38,9 @@ function App() {
           </div>
         </Grid>
         <Grid xs={4}>
-          <div className='border border-base-gray h-md-500px'>
-            test
-          </div>
+        <TreeView data={svgNode} />
         </Grid>
-        <Grid xs={12}>
-          <TreeView data={svgNode} />
-        </Grid>
+       
       </Grid>
     </div>
   );

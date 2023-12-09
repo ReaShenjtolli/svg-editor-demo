@@ -46,7 +46,6 @@ const SvgLoadButton = ({ children, setFileContent }: Child) => {
                 variant="contained"
                 className="bg-base-gray rounded-md"
                 onClick={handleButtonClick}
-
             >
                 {children}
             </Button>

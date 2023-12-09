@@ -1,40 +1,80 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as d3 from 'd3';
-
-type TreeNode = {
-  name: string;
-  children?: TreeNode[];
-};
 
 type TreeViewProps = {
   data: any;
 };
 
+interface TreeNode {
+  tagName: string;
+  id: string;
+  children: TreeNode[];
+}
+
+function getTreeFromElement(element: Element): TreeNode {
+  let tree: TreeNode = {
+    tagName: element.tagName,
+    id: element.id,
+    children: []
+  };
+
+  Array.from(element.children).forEach(child => {
+    tree.children.push(getTreeFromElement(child));
+  });
+
+  return tree;
+}
+
 const TreeView: React.FC<TreeViewProps> = ({ data }: TreeViewProps) => {
-  const svgRef = useRef<SVGSVGElement>(null);
+
+  const [expandedNodes, setExpandedNodes] = useState<{ [key: string]: boolean }>({});
+  const [treeData, setTreeData] = useState<TreeNode | null>(null);
 
   useEffect(() => {
     if (!data) return;
 
-    const svgTree = d3.hierarchy<TreeNode>(data);
-  
-    const nodesObject: Record<string, any> = {}; // Define an object to store nodes
+    const svgElement = d3.select("svg").node() as Element | null;
+    if (!svgElement) return;
 
-    svgTree.each((node: any) => {
-      const depth = node.depth; // Get the depth of the current node
-      const nodeName = `depth_${depth}_nodes`; // Create a key for the node based on depth
-    
-      if (!nodesObject[nodeName]) {
-        nodesObject[nodeName] = []; // Initialize an array if it doesn't exist for this depth
-      }
-    
-      nodesObject[nodeName].push(node.data); // Push node data into the respective depth array
-    });    
+    const svgTree = getTreeFromElement(svgElement);
+    setTreeData(svgTree)
 
   }, [data]);
 
-  return <div id='treeContainer'>test</div>
-  // return <svg ref={svgRef} />;
+  const toggleNode = (id: string) => {
+    setExpandedNodes(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
+
+  const renderTreeNode = (node: TreeNode): JSX.Element => {
+    const isExpanded = expandedNodes[node.id];
+
+    return (
+      <li>
+        <span style={node.tagName === "g" ? { color: "red" } : { color: 'black' }} onClick={() => toggleNode(node.id)}>
+          {node.id || 'N/A'}
+        </span>
+        {isExpanded && node.children.length > 0 && (
+          <ul style={{paddingLeft: "20px"}}>
+            {node.children.map(child => renderTreeNode(child))}
+          </ul>
+        )}
+      </li>
+    );
+  };
+
+
+  return (
+    <div id='treeContainer'>
+      {treeData ? <ul>
+        {renderTreeNode(treeData)}
+      </ul> :
+        <p>Loading tree data...</p>}
+    </div>
+  );
+
 };
 
 export default TreeView;
