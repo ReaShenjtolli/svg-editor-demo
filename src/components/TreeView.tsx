@@ -50,14 +50,16 @@ const TreeView: React.FC<TreeViewProps> = ({ data }: TreeViewProps) => {
 
   const renderTreeNode = (node: TreeNode): JSX.Element => {
     const isExpanded = expandedNodes[node.id];
+    const hasChildren = node.children.length > 0;
 
     return (
-      <li>
-        <span style={node.tagName === "g" ? { color: "red" } : { color: 'black' }} onClick={() => toggleNode(node.id)}>
-          {node.id || 'N/A'}
+      <li className={hasChildren ? "custom-list-disc ml-4 mt-2" : "cirlce-list-disc ml-2 mt-1"}>
+        <span className={`${hasChildren ? 'cursor-pointer hover:text-blue-600 ' : 'cursor-auto'}`}
+          onClick={() => hasChildren && toggleNode(node.id)}
+        >         {node.id || 'N/A'}
         </span>
         {isExpanded && node.children.length > 0 && (
-          <ul style={{paddingLeft: "20px"}}>
+          <ul className="ml-4">
             {node.children.map(child => renderTreeNode(child))}
           </ul>
         )}
@@ -68,10 +70,7 @@ const TreeView: React.FC<TreeViewProps> = ({ data }: TreeViewProps) => {
 
   return (
     <div id='treeContainer'>
-      {treeData ? <ul>
-        {renderTreeNode(treeData)}
-      </ul> :
-        <p>Loading tree data...</p>}
+      {treeData ? <ul className="list-none">{renderTreeNode(treeData)}</ul> : <p>Loading tree data...</p>}
     </div>
   );
 

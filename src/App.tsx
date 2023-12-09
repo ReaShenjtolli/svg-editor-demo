@@ -9,11 +9,10 @@ function App() {
   function RenderSvg(props: { svg: string }) {
     return React.createElement('div', {
       dangerouslySetInnerHTML: { __html: props.svg },
-      style: { width: '500px', height: '500px', justifyContent: 'center' }
+      style: { width: '600px' }
     });
   }
 
-  // Create a new DOMParser
   const parser = new DOMParser();
   const svgDoc = parser.parseFromString(fileContent, 'image/svg+xml');
   const svgNode = svgDoc.documentElement;
@@ -38,9 +37,8 @@ function App() {
           </div>
         </Grid>
         <Grid xs={4}>
-        <TreeView data={svgNode} />
+          <TreeView data={svgNode} />
         </Grid>
-       
       </Grid>
     </div>
   );
