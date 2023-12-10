@@ -13,9 +13,6 @@ function App() {
     });
   }
 
-  const parser = new DOMParser();
-  const svgDoc = parser.parseFromString(fileContent, 'image/svg+xml');
-  const svgNode = svgDoc.documentElement;
 
   return (
     <div className='base-position'>
@@ -37,7 +34,7 @@ function App() {
           </div>
         </Grid>
         <Grid xs={4}>
-          <TreeView data={svgNode} />
+          <TreeView hasSVG={fileContent ? true : false} />
         </Grid>
       </Grid>
     </div>

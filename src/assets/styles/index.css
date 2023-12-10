@@ -15,6 +15,7 @@ body {
 
 .custom-list-disc::before {
     content: '';
+    color: #353535;
     border-style: solid;
     border-width: 0.3em 0 0.3em 0.5em;
     border-color: transparent transparent transparent currentColor;
@@ -23,8 +24,20 @@ body {
     width: 0;
     vertical-align: middle;
     margin-right: 0.5em;
-  }
+}
 
 .cirlce-list-disc {
     list-style-type: circle;
+}
+
+
+.directory-icon {
+    background-image: url('../icons/directory.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: inline-block; 
+    vertical-align: middle; 
+    width: 1em; 
+    height: 1em;
+    margin-right: 0.5em; 
 }

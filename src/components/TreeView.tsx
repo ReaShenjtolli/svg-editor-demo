@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import * as d3 from 'd3';
+import EditModal from './EditModal';
 
 type TreeViewProps = {
-  data: any;
+  hasSVG: boolean;
 };
 
 interface TreeNode {
@@ -25,13 +26,14 @@ function getTreeFromElement(element: Element): TreeNode {
   return tree;
 }
 
-const TreeView: React.FC<TreeViewProps> = ({ data }: TreeViewProps) => {
+const TreeView: React.FC<TreeViewProps> = ({ hasSVG }: TreeViewProps) => {
 
   const [expandedNodes, setExpandedNodes] = useState<{ [key: string]: boolean }>({});
   const [treeData, setTreeData] = useState<TreeNode | null>(null);
+  const [open, setOpen] = useState<boolean>(false)
 
   useEffect(() => {
-    if (!data) return;
+    if (!hasSVG) return;
 
     const svgElement = d3.select("svg").node() as Element | null;
     if (!svgElement) return;
@@ -39,7 +41,7 @@ const TreeView: React.FC<TreeViewProps> = ({ data }: TreeViewProps) => {
     const svgTree = getTreeFromElement(svgElement);
     setTreeData(svgTree)
 
-  }, [data]);
+  }, [hasSVG]);
 
   const toggleNode = (id: string) => {
     setExpandedNodes(prev => ({
@@ -48,15 +50,26 @@ const TreeView: React.FC<TreeViewProps> = ({ data }: TreeViewProps) => {
     }));
   };
 
+  const handleRightClick = (event: React.MouseEvent, id: string) => {
+    event.preventDefault(); // Prevent the default context menu from opening
+    setOpen(true)
+    console.log(document.getElementById(id));
+
+  };
+
   const renderTreeNode = (node: TreeNode): JSX.Element => {
     const isExpanded = expandedNodes[node.id];
     const hasChildren = node.children.length > 0;
 
     return (
-      <li className={hasChildren ? "custom-list-disc ml-4 mt-2" : "cirlce-list-disc ml-2 mt-1"}>
-        <span className={`${hasChildren ? 'cursor-pointer hover:text-blue-600 ' : 'cursor-auto'}`}
+      <li key={node.id} className={`text-xs ${hasChildren ? "custom-list-disc ml-4 mt-2" : "cirlce-list-disc ml-2 mt-1"}`}>
+        <span
+          className={`${hasChildren ? 'cursor-pointer hover:text-blue-600 ' : 'cursor-auto'}`}
           onClick={() => hasChildren && toggleNode(node.id)}
-        >         {node.id || 'N/A'}
+          onContextMenu={(event) => handleRightClick(event, node.id)}
+        >
+          {hasChildren && <i className='directory-icon'></i>}
+          {node.id || 'N/A'}
         </span>
         {isExpanded && node.children.length > 0 && (
           <ul className="ml-4">
@@ -69,11 +82,16 @@ const TreeView: React.FC<TreeViewProps> = ({ data }: TreeViewProps) => {
 
 
   return (
-    <div id='treeContainer'>
-      {treeData ? <ul className="list-none">{renderTreeNode(treeData)}</ul> : <p>Loading tree data...</p>}
+    <div>
+      <EditModal
+        setOpen={setOpen}
+        open={open}
+      />
+      {treeData ?
+        <ul className="list-none">{renderTreeNode(treeData)}</ul> :
+        <p>Add SVG to load tree data file...</p>}
     </div>
   );
-
 };
 
 export default TreeView;
