@@ -31,6 +31,7 @@ const TreeView: React.FC<TreeViewProps> = ({ hasSVG }: TreeViewProps) => {
   const [expandedNodes, setExpandedNodes] = useState<{ [key: string]: boolean }>({});
   const [treeData, setTreeData] = useState<TreeNode | null>(null);
   const [open, setOpen] = useState<boolean>(false)
+  const [selectedElement, setSelectedElement] = useState<HTMLElement | null>(null)
 
   useEffect(() => {
     if (!hasSVG) return;
@@ -53,8 +54,7 @@ const TreeView: React.FC<TreeViewProps> = ({ hasSVG }: TreeViewProps) => {
   const handleRightClick = (event: React.MouseEvent, id: string) => {
     event.preventDefault(); // Prevent the default context menu from opening
     setOpen(true)
-    console.log(document.getElementById(id));
-
+    setSelectedElement(document.getElementById(id))
   };
 
   const renderTreeNode = (node: TreeNode): JSX.Element => {
@@ -86,6 +86,7 @@ const TreeView: React.FC<TreeViewProps> = ({ hasSVG }: TreeViewProps) => {
       <EditModal
         setOpen={setOpen}
         open={open}
+        selectedElement={selectedElement}
       />
       {treeData ?
         <ul className="list-none">{renderTreeNode(treeData)}</ul> :
