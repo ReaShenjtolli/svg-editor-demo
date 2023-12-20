@@ -5,10 +5,11 @@ import Fade from '@mui/material/Fade';
 import Typography from '@mui/material/Typography';
 import { Button, FormControl, InputLabel, TextField } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
+import TableEventList from "./TableEventList"
 
 type ModalProps = {
     setOpen: Function,
-    open: boolean, 
+    open: boolean,
     selectedElement: HTMLElement | null,
 }
 
@@ -26,13 +27,34 @@ const style = {
 };
 
 const textFieldStyle = {
-    position: 'relative', color: "#000000"
+    position: 'relative',
+    color: "#000000"
+}
+
+const inputFieldStyle = {
+    border: "1px solid #000",
+    borderRadius: "5px"
 }
 
 function EditModal({ setOpen, open, selectedElement }: ModalProps) {
     const handleClose = () => setOpen(false);
 
-    console.log(selectedElement);
+    let id, inlineStyle
+    let x, y, width, height
+
+
+    if (selectedElement !== null) {
+        const coordinates = selectedElement.getBoundingClientRect()
+
+        x = coordinates.x
+        y = coordinates.y
+        width = coordinates.width
+        height = coordinates.height
+
+        inlineStyle = selectedElement.style.cssText
+        id = selectedElement.getAttribute('id')
+
+    }
 
     return (
         <Modal
@@ -48,9 +70,16 @@ function EditModal({ setOpen, open, selectedElement }: ModalProps) {
         >
             <Fade in={open}>
                 <Box sx={style}>
-                    <Typography variant="h6" component="h4">
-                        Edit SVG Element
-                    </Typography>
+                    <div className='flex justify-between items-center w-full'>
+                        <Typography variant="h6" component="h4">
+                            Edit SVG Element
+                        </Typography>
+                        <div style={{ width: "2rem", height: 'auto', cursor: "pointer" }} onClick={() => setOpen(false)}>
+                            <svg xmlns="http://www.w3.org/2000/svg" version="1" viewBox="0 0 24 24">
+                                <path d="M13 12l5-5-1-1-5 5-5-5-1 1 5 5-5 5 1 1 5-5 5 5 1-1z"></path>
+                            </svg>
+                        </div>
+                    </div>
                     <div style={{ padding: "10px" }}>
                         <Grid container spacing={1}>
                             <Grid xs={12}>
@@ -65,6 +94,8 @@ function EditModal({ setOpen, open, selectedElement }: ModalProps) {
                                     <TextField
                                         id="elementId"
                                         variant="outlined"
+                                        value={id}
+                                        sx={inputFieldStyle}
                                         label=""
                                         InputLabelProps={{
                                             shrink: true,
@@ -83,7 +114,9 @@ function EditModal({ setOpen, open, selectedElement }: ModalProps) {
                                     <TextField
                                         id='height'
                                         variant='outlined'
+                                        value={height}
                                         label=""
+                                        sx={inputFieldStyle}
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
@@ -101,7 +134,9 @@ function EditModal({ setOpen, open, selectedElement }: ModalProps) {
                                     <TextField
                                         id='width'
                                         variant='outlined'
+                                        value={width}
                                         label=""
+                                        sx={inputFieldStyle}
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
@@ -118,8 +153,10 @@ function EditModal({ setOpen, open, selectedElement }: ModalProps) {
                                         htmlFor='X'>X</InputLabel>
                                     <TextField
                                         id='X'
+                                        value={x}
                                         variant='outlined'
                                         label=""
+                                        sx={inputFieldStyle}
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
@@ -137,13 +174,14 @@ function EditModal({ setOpen, open, selectedElement }: ModalProps) {
                                         id='Y'
                                         variant='outlined'
                                         label=""
+                                        sx={inputFieldStyle}
+                                        value={y}
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
                                         size='small'
                                     />
                                 </FormControl>
-
                             </Grid>
 
                             <Grid xs={12}>
@@ -159,6 +197,8 @@ function EditModal({ setOpen, open, selectedElement }: ModalProps) {
                                         id="style"
                                         variant="outlined"
                                         label=""
+                                        sx={inputFieldStyle}
+                                        value={inlineStyle}
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
@@ -170,18 +210,16 @@ function EditModal({ setOpen, open, selectedElement }: ModalProps) {
                             <Grid xs={12}>
                                 <div className="flex justify-between items-center w-full">
                                     <InputLabel sx={textFieldStyle}>Events</InputLabel>
-                                    <Button
-                                        variant="contained"
-                                        className="bg-base-gray rounded-md"
-                                    >
+                                    <Button variant="contained" className="bg-base-gray rounded-md">
                                         Add Event
                                     </Button>
                                 </div>
-                                <TextField></TextField>
+                                <div className='mt-3'>
+                                    <TableEventList />
+                                </div>
                             </Grid>
                         </Grid>
                     </div>
-
 
                 </Box>
             </Fade>

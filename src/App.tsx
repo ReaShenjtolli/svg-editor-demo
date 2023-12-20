@@ -24,7 +24,7 @@ function App() {
           </SvgLoadButton>
         </Grid>
         <Grid xs={8}>
-          <div className='border border-base-gray h-md-500px flex items-center justify-center'>
+          <div className='border rounded border-base-gray h-md-500px flex items-center justify-center'>
             {!fileContent &&
               <div>Click "Add SVG" to put your svg here!</div>
             }

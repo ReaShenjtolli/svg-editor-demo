@@ -1,5 +1,4 @@
-import React from 'react';
-import ReactDOM, { createRoot } from 'react-dom/client';
+import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './assets/styles/index.css'
@@ -16,6 +15,11 @@ const theme = createTheme({
     MuiModal: {
       defaultProps: {
         container: rootElement,
+      },
+      styleOverrides: {
+        root: {
+          overflow: "visible"
+        },
       },
     },
   },
