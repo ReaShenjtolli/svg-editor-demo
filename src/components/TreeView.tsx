@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as d3 from 'd3';
-import EditModal from './EditModal';
+import EditModal from './modales/EditModal';
 
 type TreeViewProps = {
   hasSVG: boolean;

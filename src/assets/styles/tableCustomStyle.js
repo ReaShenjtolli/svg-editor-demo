@@ -1,45 +1,78 @@
-const commonCellStyle = {
-    fontSize: "12px",
-    lineHeight: "1rem",
+export const commonCellStyle = {
+    fontSize: "10px",
+    lineHeight: "0.5rem",
     borderBottom: "none",
     position: 'relative',
 };
 
-export const firstCellStyle = {
+const commonAfterStyles = {
+    content: '""',
+    position: 'absolute',
+    bottom: 0,
+    height: '0.2px',
+};
+
+export const firstCellStyleHead = {
     ...commonCellStyle,
     '&::after': {
-        content: '""',
-        position: 'absolute',
+        ...commonAfterStyles,
         left: '10px', 
-        bottom: 0,
         width: 'calc(100% - 10px)',
-        height: '0.2px',
         backgroundColor: '#000',
+    }
+};
+
+export const lastCellStyleHead = {
+    ...commonCellStyle,
+    '&::after': {
+        ...commonAfterStyles,
+        right: '10px', 
+        width: 'calc(100% - 10px)',
+        backgroundColor: '#000',
+    }
+};
+
+export const cellStyleHead = {
+    ...commonCellStyle,
+    '&::after': {
+        ...commonAfterStyles,
+        left: '0', 
+        width: '100%',
+        backgroundColor: '#000',
+    }
+};
+
+const commonNonHeaderCellStyle = {
+    ...commonCellStyle,
+    '&::after': {
+        ...commonAfterStyles,
+        backgroundColor: 'rgba(224, 224, 224, 1)',
+    }
+};
+
+export const firstCellStyle = {
+    ...commonNonHeaderCellStyle,
+    '&::after': {
+        ...commonNonHeaderCellStyle['&::after'],
+        left: '10px',
+        width: 'calc(100% - 10px)',
     }
 };
 
 export const lastCellStyle = {
-    ...commonCellStyle,
+    ...commonNonHeaderCellStyle,
     '&::after': {
-        content: '""',
-        position: 'absolute',
-        right: '10px', 
-        bottom: 0,
-        width: 'calc(100% - 10px)', 
-        height: '0.2px',
-        backgroundColor: '#000',
+        ...commonNonHeaderCellStyle['&::after'],
+        right: '10px',
+        width: 'calc(100% - 10px)',
     }
 };
 
 export const cellStyle = {
-    ...commonCellStyle,
+    ...commonNonHeaderCellStyle,
     '&::after': {
-        content: '""',
-        position: 'absolute',
-        left: '0', 
-        bottom: 0,
+        ...commonNonHeaderCellStyle['&::after'],
+        left: '0',
         width: '100%',
-        height: '0.2px',
-        backgroundColor: '#000',
     }
 };
