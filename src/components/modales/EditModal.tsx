@@ -225,7 +225,7 @@ function EditModal({ setOpen, open, selectedElement }: ModalProps) {
                                         </Button>
                                     </div>
                                     <div className='mt-3'>
-                                        <TableEventList />
+                                        <TableEventList elementId={id} />
                                     </div>
                                 </Grid>
                             </Grid>

@@ -6,7 +6,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 
 type DeleteProps = {
-    open: boolean, 
+    open: boolean,
     onClose: () => void;
     onConfirm: () => void;
     itemName: string;
@@ -18,14 +18,20 @@ function DeleteModal({ open, onClose, onConfirm, itemName }: DeleteProps) {
         <Dialog
             open={open}
             onClose={onClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
         >
-            <DialogTitle id="alert-dialog-title">
-                {"Confirm Deletion"}
-            </DialogTitle>
+            <div className='flex justify-between items-center w-full'>
+                <DialogTitle>
+                    Confirm Deletion
+                </DialogTitle>
+                <div style={{ width: "2rem", height: 'auto', cursor: "pointer", margin: '10px' }} onClick={onClose}>
+                    <svg xmlns="http://www.w3.org/2000/svg" version="1" viewBox="0 0 24 24">
+                        <path d="M13 12l5-5-1-1-5 5-5-5-1 1 5 5-5 5 1 1 5-5 5 5 1-1z"></path>
+                    </svg>
+                </div>
+            </div>
+
             <DialogContent>
-                <DialogContentText id="alert-dialog-description">
+                <DialogContentText>
                     Are you sure you want to delete {itemName}? This action cannot be undone.
                 </DialogContentText>
             </DialogContent>

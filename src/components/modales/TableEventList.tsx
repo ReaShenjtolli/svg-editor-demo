@@ -19,35 +19,50 @@ import {
 } from '../../assets/styles/tableCustomStyle';
 import AddEventModal from './AddEventModal';
 
-function createData(
-    id: number,
+type dataType = {
+    id: string,
     event_type: string,
     event_action: string
+}
 
+function createData(
+    id: string,
+    event_type: string,
+    event_action: string
 ) {
     return { id, event_action, event_type };
 }
 
 const rows = [
-    createData(1, "test1", "test_action"),
-    createData(2, "test2", "test_action"),
-    createData(3, "test3", "test_action"),
+    createData("1", "test1", "test_action"),
+    createData("2", "test2", "test_action"),
+    createData("3", "test3", "test_action"),
 
 ];
 
-export default function BasicTable() {
+export default function TableEventList({ elementId }: { elementId: string | null | undefined}) {
 
     const [openDelete, setOpenDelete] = useState<boolean>(false)
     const [openEditEvents, setOpenEditEvents] = useState<boolean>(false)
+    const [selectedItem, setSelectedItem] = useState<{ name: string, id: string }>({ name: '', id: '' });
 
-    const item = 'test'
+    function handleEdit(item: dataType) {
+        setSelectedItem({ name: item.event_type, id: item.id })
+        setOpenEditEvents(true);
+    };
+
+
+    function handleDelete(item: dataType) {
+        setSelectedItem({ name: item.event_type, id: item.id })
+        setOpenDelete(true);
+    };
 
     const handleCloseModal = () => {
         setOpenDelete(false);
     };
 
     const handleConfirmDelete = () => {
-        console.log("Item deleted"); // Replace with your delete logic
+        console.log(`Item deleted: ${selectedItem.name}`);
         handleCloseModal();
     };
 
@@ -57,12 +72,12 @@ export default function BasicTable() {
                 open={openDelete}
                 onClose={handleCloseModal}
                 onConfirm={handleConfirmDelete}
-                itemName={item}
+                itemName={selectedItem.name}
             />
             <AddEventModal
                 open={openEditEvents}
                 setOpen={setOpenEditEvents}
-                id={"test"}
+                id={elementId}
             />
             <TableContainer>
                 <Table sx={{
@@ -95,13 +110,13 @@ export default function BasicTable() {
                                 </TableCell>
                                 <TableCell align="center"
                                     sx={index === rows.length - 1 ? commonCellStyle : cellStyle}
-                                    onClick={() => setOpenEditEvents(true)}
+                                    onClick={() => handleEdit(row)}
                                 >
-                                    <EditIcon />
+                                    <EditIcon style={{ cursor: "pointer" }} />
                                 </TableCell>
                                 <TableCell align="center"
                                     sx={index === rows.length - 1 ? commonCellStyle : lastCellStyle}
-                                    onClick={() => setOpenDelete(true)}
+                                    onClick={() => handleDelete(row)}
                                 >
                                     <TrashIcon style={{ cursor: "pointer" }} />
                                 </TableCell>
