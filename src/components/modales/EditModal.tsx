@@ -66,6 +66,8 @@ function EditModal({ setOpen, open, selectedElement }: ModalProps) {
                 open={openAddEvents}
                 setOpen={setOpenAddEvent}
                 id={id}
+                event_action=''
+                event_type=''
             />
             <Modal
                 open={open}
@@ -84,13 +86,13 @@ function EditModal({ setOpen, open, selectedElement }: ModalProps) {
                             <Typography variant="h6" component="h4" className='font-bold'>
                                 Edit SVG Element
                             </Typography>
-                            <div style={{ width: "2rem", height: 'auto', cursor: "pointer" }} onClick={() => setOpen(false)}>
+                            <div className='close-button' onClick={() => setOpen(false)}>
                                 <svg xmlns="http://www.w3.org/2000/svg" version="1" viewBox="0 0 24 24">
                                     <path d="M13 12l5-5-1-1-5 5-5-5-1 1 5 5-5 5 1 1 5-5 5 5 1-1z"></path>
                                 </svg>
                             </div>
                         </div>
-                        <div style={{ padding: "10px" }}>
+                        <div className="p-2.5">
                             <Grid container spacing={1}>
                                 <Grid xs={12}>
                                     <FormControl fullWidth variant="standard">
@@ -220,7 +222,11 @@ function EditModal({ setOpen, open, selectedElement }: ModalProps) {
                                 <Grid xs={12}>
                                     <div className="flex justify-between items-center w-full">
                                         <InputLabel sx={textFieldStyle}>Events</InputLabel>
-                                        <Button variant="contained" className="bg-base-gray rounded-md" onClick={() => setOpenAddEvent(true)}>
+                                        <Button
+                                            variant="contained"
+                                            className="bg-base-gray rounded-md"
+                                            onClick={() => setOpenAddEvent(true)}
+                                        >
                                             Add Event
                                         </Button>
                                     </div>

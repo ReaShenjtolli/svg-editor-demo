@@ -18,16 +18,16 @@ const SvgLoadButton = ({ children, setFileContent }: Child) => {
 
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         const selectedFile = e.target.files && e.target.files[0];
-        // Do something with the selected file, for example, read its content
+
         if (selectedFile) {
           const reader = new FileReader();
     
           reader.onload = (event) => {
             const content = event.target?.result as string;
             setFileContent(content);
+            localStorage.setItem('loadedSvg', content);
           };
     
-          // Read the file as text
           reader.readAsText(selectedFile);
         }
     };    

@@ -1,10 +1,22 @@
+import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Unstable_Grid2';
+import { Button } from '@mui/material';
 import SvgLoadButton from './components/SvgLoadButton';
 import TreeView from './components/TreeView';
-import React, { useState } from 'react';
+import Loader from './components/Loader';
 
 function App() {
+
   const [fileContent, setFileContent] = useState<string>('')
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const savedSvg = localStorage.getItem('loadedSvg');
+    if (savedSvg) {
+      setFileContent(savedSvg);
+    }
+    setIsLoading(false);
+  }, []);
 
   function RenderSvg(props: { svg: string }) {
     return React.createElement('div', {
@@ -13,6 +25,16 @@ function App() {
     });
   }
 
+  const handleRemove = () => {
+    localStorage.removeItem('loadedSvg');
+    setFileContent('');
+  }
+
+  if (isLoading) {
+    return (
+      <Loader />
+    )
+  }
 
   return (
     <div className='base-position'>
@@ -34,8 +56,20 @@ function App() {
           </div>
         </Grid>
         <Grid xs={4}>
-          <TreeView hasSVG={fileContent ? true : false} />
+          {fileContent ?
+            <TreeView hasSVG={fileContent ? true : false} /> :
+            <p>Add SVG to load tree data file...</p>
+          }
         </Grid>
+        {fileContent &&
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={handleRemove}
+          >
+            Remove Svg
+          </Button>
+        }
       </Grid>
     </div>
   );

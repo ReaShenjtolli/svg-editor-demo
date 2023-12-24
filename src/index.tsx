@@ -1,8 +1,9 @@
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import './assets/styles/index.css'
 import { StyledEngineProvider, ThemeProvider, createTheme } from '@mui/material/styles';
+import './assets/styles/index.css'
+
 
 
 const rootElement = document.getElementById("root");

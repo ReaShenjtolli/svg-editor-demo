@@ -90,7 +90,8 @@ const TreeView: React.FC<TreeViewProps> = ({ hasSVG }: TreeViewProps) => {
       />
       {treeData ?
         <ul className="list-none">{renderTreeNode(treeData)}</ul> :
-        <p>Add SVG to load tree data file...</p>}
+        <p>Add SVG to load tree data file...</p>
+      }
     </div>
   );
 };

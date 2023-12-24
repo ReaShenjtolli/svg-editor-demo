@@ -23,7 +23,7 @@ function DeleteModal({ open, onClose, onConfirm, itemName }: DeleteProps) {
                 <DialogTitle>
                     Confirm Deletion
                 </DialogTitle>
-                <div style={{ width: "2rem", height: 'auto', cursor: "pointer", margin: '10px' }} onClick={onClose}>
+                <div className='close-button m-2.5' onClick={onClose}>
                     <svg xmlns="http://www.w3.org/2000/svg" version="1" viewBox="0 0 24 24">
                         <path d="M13 12l5-5-1-1-5 5-5-5-1 1 5 5-5 5 1 1 5-5 5 5 1-1z"></path>
                     </svg>

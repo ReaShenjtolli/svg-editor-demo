@@ -37,23 +37,24 @@ const rows = [
     createData("1", "test1", "test_action"),
     createData("2", "test2", "test_action"),
     createData("3", "test3", "test_action"),
+    createData("4", "click", "test_action"),
 
 ];
 
-export default function TableEventList({ elementId }: { elementId: string | null | undefined}) {
+export default function TableEventList({ elementId }: { elementId: string | null | undefined }) {
 
     const [openDelete, setOpenDelete] = useState<boolean>(false)
     const [openEditEvents, setOpenEditEvents] = useState<boolean>(false)
-    const [selectedItem, setSelectedItem] = useState<{ name: string, id: string }>({ name: '', id: '' });
+    const [selectedItem, setSelectedItem] = useState<{ type: string, action: string }>({ type: '', action: '' });
 
     function handleEdit(item: dataType) {
-        setSelectedItem({ name: item.event_type, id: item.id })
+        setSelectedItem({ type: item.event_type, action: item.event_action })
         setOpenEditEvents(true);
     };
 
 
     function handleDelete(item: dataType) {
-        setSelectedItem({ name: item.event_type, id: item.id })
+        setSelectedItem({ type: item.event_type, action: item.event_action })
         setOpenDelete(true);
     };
 
@@ -62,7 +63,7 @@ export default function TableEventList({ elementId }: { elementId: string | null
     };
 
     const handleConfirmDelete = () => {
-        console.log(`Item deleted: ${selectedItem.name}`);
+        console.log(`Item deleted: ${selectedItem.type}`);
         handleCloseModal();
     };
 
@@ -72,12 +73,14 @@ export default function TableEventList({ elementId }: { elementId: string | null
                 open={openDelete}
                 onClose={handleCloseModal}
                 onConfirm={handleConfirmDelete}
-                itemName={selectedItem.name}
+                itemName={selectedItem.type}
             />
             <AddEventModal
                 open={openEditEvents}
                 setOpen={setOpenEditEvents}
                 id={elementId}
+                event_type={selectedItem.type}
+                event_action={selectedItem.action}
             />
             <TableContainer>
                 <Table sx={{
@@ -112,13 +115,13 @@ export default function TableEventList({ elementId }: { elementId: string | null
                                     sx={index === rows.length - 1 ? commonCellStyle : cellStyle}
                                     onClick={() => handleEdit(row)}
                                 >
-                                    <EditIcon style={{ cursor: "pointer" }} />
+                                    <EditIcon className='cursor-pointer' />
                                 </TableCell>
                                 <TableCell align="center"
                                     sx={index === rows.length - 1 ? commonCellStyle : lastCellStyle}
                                     onClick={() => handleDelete(row)}
                                 >
-                                    <TrashIcon style={{ cursor: "pointer" }} />
+                                    <TrashIcon className='cursor-pointer' />
                                 </TableCell>
                             </TableRow>
                         ))}
