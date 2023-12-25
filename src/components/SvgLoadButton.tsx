@@ -20,17 +20,18 @@ const SvgLoadButton = ({ children, setFileContent }: Child) => {
         const selectedFile = e.target.files && e.target.files[0];
 
         if (selectedFile) {
-          const reader = new FileReader();
-    
-          reader.onload = (event) => {
-            const content = event.target?.result as string;
-            setFileContent(content);
-            localStorage.setItem('loadedSvg', content);
-          };
-    
-          reader.readAsText(selectedFile);
+            const reader = new FileReader();
+
+            reader.onload = (event) => {
+                const content = event.target?.result as string;
+                setFileContent(content);
+                localStorage.setItem('loadedSvg', content);
+                localStorage.setItem('svgEvents', JSON.stringify({}))
+            };
+
+            reader.readAsText(selectedFile);
         }
-    };    
+    };
 
     return (
         <>

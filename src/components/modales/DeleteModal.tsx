@@ -10,6 +10,7 @@ type DeleteProps = {
     onClose: () => void;
     onConfirm: () => void;
     itemName: string;
+    itemId: string
 }
 
 function DeleteModal({ open, onClose, onConfirm, itemName }: DeleteProps) {

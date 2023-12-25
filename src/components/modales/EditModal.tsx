@@ -63,11 +63,15 @@ function EditModal({ setOpen, open, selectedElement }: ModalProps) {
     return (
         <React.Fragment>
             <AddEventModal
+                header={"Add Events"}
                 open={openAddEvents}
                 setOpen={setOpenAddEvent}
-                id={id}
-                event_action=''
-                event_type=''
+                elementId={id}
+                editEvents={{
+                    id: '',
+                    event_type: '',
+                    event_action: ''
+                }}
             />
             <Modal
                 open={open}

@@ -51,7 +51,7 @@ body {
 .close-button {
     width: 2rem;
     height: auto;
-    cursor: "pointer"
+    cursor: pointer
 }
 
 .loader-container {

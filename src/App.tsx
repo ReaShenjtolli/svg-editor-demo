@@ -27,6 +27,7 @@ function App() {
 
   const handleRemove = () => {
     localStorage.removeItem('loadedSvg');
+    localStorage.removeItem('svgEvents');
     setFileContent('');
   }
 

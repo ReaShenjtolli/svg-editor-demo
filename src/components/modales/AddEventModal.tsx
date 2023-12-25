@@ -1,15 +1,20 @@
-import React, { useState, FormEvent } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import Box from '@mui/material/Box';
 import { Button, TextField, MenuItem, Checkbox } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
+import { addOrModifyEvents, receiveAllEventType } from '../../lib/localStorageEvents';
 
 type AddEventsProps = {
+    header: string
     open: boolean,
     setOpen: Function,
-    id: string | null | undefined,
-    event_type: string,
-    event_action: string
+    elementId: string | null | undefined,
+    editEvents: {
+        id: string,
+        event_type: string,
+        event_action: string
+    }
 }
 
 const style = {
@@ -27,36 +32,42 @@ const style = {
 };
 
 
-export default function AddEventModal({ open, setOpen, id, event_type, event_action }: AddEventsProps) {
+export default function AddEventModal({ header, open, setOpen, elementId, editEvents }: AddEventsProps) {
 
-    const handleClose = () => {
-        setOpen(false)
-        setEventAction(event_action)
-        setEventType(event_type)
-        setChecked(true)
-        setError({ eventAction: false, eventType: false })
-    };
+    const [eventType, setEventType] = useState(editEvents.event_type);
+    const [eventAction, setEventAction] = useState(editEvents.event_action);
+    const [checked, setChecked] = useState(editEvents.event_action === '' ? true : false);
+    const [error, setError] = useState({ eventType: false, eventAction: false });
 
-    const [eventType, setEventType] = useState<string>(event_type);
-    const [eventAction, setEventAction] = useState<string>(event_action);
-    const [checked, setChecked] = React.useState<boolean>(true);
-    const [error, setError] = useState({ eventType: false, eventAction: false })
+    useEffect(() => {
+        setEventType(editEvents.event_type);
+        setEventAction(editEvents.event_action);
+        setChecked(editEvents.event_action === '' ? true : false);
+    }, [editEvents]);
 
-    const handleEventText = `alert('Event triggered on element with ID: ${id}');`
+    const handleEventText = `alert('Event triggered on element with ID: ${elementId}');`;
 
-    const handleSubmit = (e: FormEvent) => {
-        e.preventDefault()
+    const handleClose = useCallback(() => {
+        setOpen(false);
+        setEventType(editEvents.event_type);
+        setEventAction(editEvents.event_action);
+        setChecked(true);
+        setError({ eventType: false, eventAction: false });
+    }, [setOpen, editEvents]);
 
-        if (eventType === "") {
-            setError({ ...error, eventType: true })
+    const validateAndSubmit = useCallback(() => {
+        if (!eventType) {
+            setError(prev => ({ ...prev, eventType: true }));
+            return;
         }
 
-        if (eventAction === "") {
-            setError({ ...error, eventAction: true })
+        if (!eventAction && !checked) {
+            setError(prev => ({ ...prev, eventAction: true }));
+            return;
         }
 
-        if (id && !error.eventAction && !error.eventType) {
-            const svgElement = document.getElementById(id);
+        if (elementId) {
+            const svgElement = document.getElementById(elementId);
 
             if (!svgElement) {
                 alert('Element with specified ID not found!');
@@ -70,9 +81,21 @@ export default function AddEventModal({ open, setOpen, id, event_type, event_act
 
             svgElement.addEventListener(eventType, handleEvent);
 
-            handleClose()
+            const addNewEvent = {
+                id: parseInt(editEvents.id),
+                event_type: eventType,
+                event_action: checked ? handleEventText : eventAction
+            }
+
+            addOrModifyEvents(elementId, addNewEvent)
+
+            handleClose();
         }
-    }
+    }, [eventType, eventAction, checked, elementId, handleClose]);
+
+    const chosenEvents = elementId && receiveAllEventType(elementId)
+    const isEventChosen = (eventType: string) => elementId ? chosenEvents.includes(eventType) : false
+
 
 
     return (
@@ -86,9 +109,9 @@ export default function AddEventModal({ open, setOpen, id, event_type, event_act
 
                 <Box sx={style}>
 
-                    <div className='flex justify-between items-center w-full'>
+                    <div className='flex justify-between items-center w-full mb-2'>
                         <Typography variant="h6" component="h2" className='font-bold'>
-                            Add Events
+                            {header}
                         </Typography>
                         <div className='close-button'
                             onClick={() => {
@@ -106,7 +129,7 @@ export default function AddEventModal({ open, setOpen, id, event_type, event_act
                             id="elementId"
                             label="Element Id"
                             disabled
-                            defaultValue={id ?? id}
+                            defaultValue={elementId ?? elementId}
                             InputProps={{
                                 readOnly: true,
                             }}
@@ -123,9 +146,9 @@ export default function AddEventModal({ open, setOpen, id, event_type, event_act
                             }}
                             error={error.eventType ?? false}
                         >
-                            <MenuItem value="click">onClick</MenuItem>
-                            <MenuItem value="dblclick">onDubleClick</MenuItem>
-                            <MenuItem value='mouseenter'>mouseEnter</MenuItem>
+                            <MenuItem disabled={isEventChosen('click')} value="click">click</MenuItem>
+                            <MenuItem disabled={isEventChosen('dblclick')} value="dblclick">dblclick</MenuItem>
+                            <MenuItem disabled={isEventChosen('mouseenter')} value='mouseenter'>mouseenter</MenuItem>
                         </TextField>
 
                         <div className='flex justify-between items-center ml-2'>
@@ -167,7 +190,7 @@ export default function AddEventModal({ open, setOpen, id, event_type, event_act
                     <Button
                         variant="contained"
                         className="bg-base-gray rounded-md m-2"
-                        onClick={handleSubmit}
+                        onClick={validateAndSubmit}
                     >
                         Apply Changes
                     </Button>

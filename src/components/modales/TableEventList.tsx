@@ -18,70 +18,56 @@ import {
     cellStyle
 } from '../../assets/styles/tableCustomStyle';
 import AddEventModal from './AddEventModal';
+import { deleteEvent, receiveEvents } from '../../lib/localStorageEvents';
 
-type dataType = {
+type DataType = {
     id: string,
     event_type: string,
     event_action: string
 }
-
-function createData(
-    id: string,
-    event_type: string,
-    event_action: string
-) {
-    return { id, event_action, event_type };
-}
-
-const rows = [
-    createData("1", "test1", "test_action"),
-    createData("2", "test2", "test_action"),
-    createData("3", "test3", "test_action"),
-    createData("4", "click", "test_action"),
-
-];
 
 export default function TableEventList({ elementId }: { elementId: string | null | undefined }) {
 
-    const [openDelete, setOpenDelete] = useState<boolean>(false)
-    const [openEditEvents, setOpenEditEvents] = useState<boolean>(false)
-    const [selectedItem, setSelectedItem] = useState<{ type: string, action: string }>({ type: '', action: '' });
+    const [modalState, setModalState] = useState({ openDelete: false, openEditEvents: false });
+    const [selectedItem, setSelectedItem] = useState<DataType>({ id: '', event_type: '', event_action: '' });
 
-    function handleEdit(item: dataType) {
-        setSelectedItem({ type: item.event_type, action: item.event_action })
-        setOpenEditEvents(true);
+    const events = elementId && receiveEvents(elementId)
+
+    function handleModalAction(item: DataType, action: 'edit' | 'delete') {
+        setSelectedItem(item);
+
+        setModalState({
+            openDelete: action === 'delete',
+            openEditEvents: action === 'edit'
+        });
     };
 
-
-    function handleDelete(item: dataType) {
-        setSelectedItem({ type: item.event_type, action: item.event_action })
-        setOpenDelete(true);
-    };
-
-    const handleCloseModal = () => {
-        setOpenDelete(false);
-    };
+    const handleCloseModal = () => setModalState({ openDelete: false, openEditEvents: false });
 
     const handleConfirmDelete = () => {
-        console.log(`Item deleted: ${selectedItem.type}`);
+        if(elementId)
+            deleteEvent(elementId, parseInt(selectedItem.id))
+
         handleCloseModal();
     };
 
     return (
         <React.Fragment>
             <DeleteModal
-                open={openDelete}
+                open={modalState.openDelete}
                 onClose={handleCloseModal}
                 onConfirm={handleConfirmDelete}
-                itemName={selectedItem.type}
+                itemName={selectedItem.event_type}
+                itemId={selectedItem.id}
             />
             <AddEventModal
-                open={openEditEvents}
-                setOpen={setOpenEditEvents}
-                id={elementId}
-                event_type={selectedItem.type}
-                event_action={selectedItem.action}
+                header={"Edit Events"}
+                open={modalState.openEditEvents}
+                setOpen={(open: boolean) => setModalState({ ...modalState, openEditEvents: open })}
+                elementId={elementId}
+                editEvents={selectedItem}
             />
+
             <TableContainer>
                 <Table sx={{
                     width: "100%",
@@ -99,32 +85,49 @@ export default function TableEventList({ elementId }: { elementId: string | null
                             <TableCell align="center" sx={lastCellStyleHead}></TableCell>
                         </TableRow>
                     </TableHead>
-                    <TableBody>
-                        {rows.map((row, index) => (
-                            <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} >
-                                <TableCell component="th" scope="row" sx={index === rows.length - 1 ? commonCellStyle : firstCellStyle}>
-                                    {row.id}
-                                </TableCell>
-                                <TableCell align="center" sx={index === rows.length - 1 ? commonCellStyle : cellStyle}>
-                                    {row.event_type}
-                                </TableCell>
-                                <TableCell align="center" sx={index === rows.length - 1 ? commonCellStyle : cellStyle} >
-                                    {row.event_action}
-                                </TableCell>
-                                <TableCell align="center"
-                                    sx={index === rows.length - 1 ? commonCellStyle : cellStyle}
-                                    onClick={() => handleEdit(row)}
-                                >
-                                    <EditIcon className='cursor-pointer' />
-                                </TableCell>
-                                <TableCell align="center"
-                                    sx={index === rows.length - 1 ? commonCellStyle : lastCellStyle}
-                                    onClick={() => handleDelete(row)}
-                                >
-                                    <TrashIcon className='cursor-pointer' />
-                                </TableCell>
+                    <TableBody className='mb-2.5'>
+                        {events.length === 0 ?
+                            <TableRow>
+                                <TableCell colSpan={5}>No events found</TableCell>
                             </TableRow>
-                        ))}
+                            :
+                            events.map((row: DataType, index: number) => (
+                                <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                                    <TableCell
+                                        component="th"
+                                        scope="row"
+                                        sx={index === events.length - 1 ? commonCellStyle : firstCellStyle}
+                                    >
+                                        {row.id}
+                                    </TableCell>
+                                    <TableCell
+                                        align="center"
+                                        sx={index === events.length - 1 ? commonCellStyle : cellStyle}
+                                    >
+                                        {row.event_type}
+                                    </TableCell>
+                                    <TableCell
+                                        align="center"
+                                        sx={index === events.length - 1 ? commonCellStyle : cellStyle}
+                                    >
+                                        {row.event_action}
+                                    </TableCell>
+                                    <TableCell
+                                        align="center"
+                                        sx={index === events.length - 1 ? commonCellStyle : cellStyle}
+                                        onClick={() => handleModalAction(row, 'edit')}
+                                    >
+                                        <EditIcon className='cursor-pointer' />
+                                    </TableCell>
+                                    <TableCell
+                                        align="center"
+                                        sx={index === events.length - 1 ? commonCellStyle : lastCellStyle}
+                                        onClick={() => handleModalAction(row, 'delete')}
+                                    >
+                                        <TrashIcon className='cursor-pointer' />
+                                    </TableCell>
+                                </TableRow>
+                            ))}
                     </TableBody>
                 </Table>
             </TableContainer>
