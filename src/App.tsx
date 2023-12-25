@@ -4,6 +4,7 @@ import { Button } from '@mui/material';
 import SvgLoadButton from './components/SvgLoadButton';
 import TreeView from './components/TreeView';
 import Loader from './components/Loader';
+import { addEventsInSvg } from './lib/localStorageEvents';
 
 function App() {
 
@@ -15,8 +16,9 @@ function App() {
     if (savedSvg) {
       setFileContent(savedSvg);
     }
+    addEventsInSvg()
     setIsLoading(false);
-  }, []);
+}, [fileContent]);
 
   function RenderSvg(props: { svg: string }) {
     return React.createElement('div', {

@@ -31,7 +31,7 @@ export default function TableEventList({ elementId }: { elementId: string | null
     const [modalState, setModalState] = useState({ openDelete: false, openEditEvents: false });
     const [selectedItem, setSelectedItem] = useState<DataType>({ id: '', event_type: '', event_action: '' });
 
-    const events = elementId && receiveEvents(elementId)
+    const events = elementId ? receiveEvents(elementId) : []
 
     function handleModalAction(item: DataType, action: 'edit' | 'delete') {
         setSelectedItem(item);
