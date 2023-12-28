@@ -13,11 +13,9 @@ function getEvents() {
     return storedEvents ? JSON.parse(storedEvents) : null;
 }
 
-
 function generateInnerId(svgElement: string) {
 
     let currentEvents = getEvents();
-
     let maxId = 0;
 
     if (currentEvents[svgElement] && currentEvents[svgElement].length > 0) {
@@ -52,13 +50,12 @@ export function addOrModifyEvents(svgElement: string, eventData: EventData) {
     saveEvents(events);
 }
 
-
 export function deleteEvent(svgElement: string, id: number) {
     let currentEvents = getEvents();
 
     if (currentEvents[svgElement]) {
         currentEvents[svgElement] = currentEvents[svgElement].filter((event: EventData) => !(event.id === id));
-        const events = currentEvents;        
+        const events = currentEvents;
         saveEvents(events);
     }
 }
@@ -99,8 +96,6 @@ export function addEventsInSvg() {
                         const func = new Function('event', event.event_action);
                         func(e);
                     };
-
-                    console.log(event.event_type, handleEvent);
 
                     svgElement.addEventListener(event.event_type, handleEvent); // Use event.event_type
                 });

@@ -1,9 +1,15 @@
-import { useState, useCallback, useEffect } from 'react'
-import Box from '@mui/material/Box';
-import { Button, TextField, MenuItem, Checkbox } from '@mui/material';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
+import React, { useState, useCallback, useEffect } from 'react'
 import { addOrModifyEvents, receiveAllEventType } from '../../lib/localStorageEvents';
+import {
+    Button,
+    TextField,
+    MenuItem,
+    Checkbox,
+    Box,
+    Modal,
+    Typography
+} from '@mui/material';
+import { AddEventModalStyle } from '../../assets/styles/modalsStyle';
 
 type AddEventsProps = {
     header: string
@@ -16,20 +22,6 @@ type AddEventsProps = {
         event_action: string
     }
 }
-
-const style = {
-    position: 'absolute' as 'absolute',
-    top: '50%',
-    left: '50%',
-    width: 500,
-    transform: 'translate(-50%, -50%)',
-    bgcolor: 'background.paper',
-    border: '1px solid #000',
-    borderRadius: "10px",
-    boxShadow: 24,
-    p: 4,
-    '& .MuiTextField-root': { m: 1, width: '100%' },
-};
 
 
 export default function AddEventModal({ header, open, setOpen, elementId, editEvents }: AddEventsProps) {
@@ -97,7 +89,6 @@ export default function AddEventModal({ header, open, setOpen, elementId, editEv
     const isEventChosen = (eventType: string) => elementId ? chosenEvents.includes(eventType) : false
 
 
-
     return (
         <div>
             <Modal
@@ -107,7 +98,7 @@ export default function AddEventModal({ header, open, setOpen, elementId, editEv
                 aria-describedby="modal-modal-description"
             >
 
-                <Box sx={style}>
+                <Box sx={AddEventModalStyle}>
 
                     <div className='flex justify-between items-center w-full mb-2'>
                         <Typography variant="h6" component="h2" className='font-bold'>

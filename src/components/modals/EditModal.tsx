@@ -1,13 +1,19 @@
-import Backdrop from '@mui/material/Backdrop';
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
-import Fade from '@mui/material/Fade';
-import Typography from '@mui/material/Typography';
-import { Button, FormControl, InputLabel, TextField } from '@mui/material';
+import React from 'react';
 import Grid from '@mui/material/Unstable_Grid2';
 import TableEventList from "./TableEventList"
-import React from 'react';
 import AddEventModal from './AddEventModal';
+import {
+    Button,
+    FormControl,
+    InputLabel,
+    TextField,
+    Backdrop,
+    Box,
+    Modal,
+    Typography,
+    Fade
+} from '@mui/material';
+import { editSVGModalStyle, inputFieldStyle, textFieldStyle } from '../../assets/styles/modalsStyle';
 
 type ModalProps = {
     setOpen: Function,
@@ -15,28 +21,7 @@ type ModalProps = {
     selectedElement: HTMLElement | null,
 }
 
-const style = {
-    position: 'absolute' as 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '1px solid #000',
-    borderRadius: "10px",
-    boxShadow: 24,
-    p: 1,
-};
 
-const textFieldStyle = {
-    position: 'relative',
-    color: "#000000"
-}
-
-const inputFieldStyle = {
-    border: "1px solid #000",
-    borderRadius: "5px"
-}
 
 function EditModal({ setOpen, open, selectedElement }: ModalProps) {
 
@@ -85,7 +70,7 @@ function EditModal({ setOpen, open, selectedElement }: ModalProps) {
                 }}
             >
                 <Fade in={open}>
-                    <Box sx={style}>
+                    <Box sx={editSVGModalStyle}>
                         <div className='flex justify-between items-center w-full'>
                             <Typography variant="h6" component="h4" className='font-bold'>
                                 Edit SVG Element

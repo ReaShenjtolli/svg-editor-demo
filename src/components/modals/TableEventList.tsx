@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
 import DeleteModal from './DeleteModal'
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
+import AddEventModal from './AddEventModal';
+import { deleteEvent, receiveEvents } from '../../lib/localStorageEvents';
 import { ReactComponent as TrashIcon } from '../../assets/icons/trash.svg'
 import { ReactComponent as EditIcon } from "../../assets/icons/edit_pen.svg"
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow
+} from '@mui/material'
 import {
     commonCellStyle,
     firstCellStyleHead,
@@ -17,8 +21,7 @@ import {
     lastCellStyle,
     cellStyle
 } from '../../assets/styles/tableCustomStyle';
-import AddEventModal from './AddEventModal';
-import { deleteEvent, receiveEvents } from '../../lib/localStorageEvents';
+
 
 type DataType = {
     id: string,
@@ -45,8 +48,10 @@ export default function TableEventList({ elementId }: { elementId: string | null
     const handleCloseModal = () => setModalState({ openDelete: false, openEditEvents: false });
 
     const handleConfirmDelete = () => {
-        if(elementId)
+        if (elementId) {
             deleteEvent(elementId, parseInt(selectedItem.id))
+            window.location.reload()
+        }
 
         handleCloseModal();
     };
