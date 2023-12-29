@@ -1,7 +1,10 @@
 In the project directory, you can run:
+### `npm install`
+
+### `npm build`
+
 ### `npm start`
 
-node version --> v21.4
 
 User Story
 
