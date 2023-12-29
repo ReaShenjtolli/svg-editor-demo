@@ -1,8 +1,7 @@
 In the project directory, you can run:
-### `yarn start`
+### `npm start`
 
 node version --> v21.4
-yarn version --> 1.22.21
 
 User Story
 
