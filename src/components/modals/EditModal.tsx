@@ -209,19 +209,26 @@ function EditModal({ setOpen, open, selectedElement }: ModalProps) {
                                 </Grid>
 
                                 <Grid xs={12}>
-                                    <div className="flex justify-between items-center w-full">
-                                        <InputLabel sx={textFieldStyle}>Events</InputLabel>
-                                        <Button
-                                            variant="contained"
-                                            className="bg-base-gray rounded-md"
-                                            onClick={() => setOpenAddEvent(true)}
-                                        >
-                                            Add Event
-                                        </Button>
-                                    </div>
-                                    <div className='mt-3'>
-                                        <TableEventList elementId={id} />
-                                    </div>
+                                    {id ?
+                                        <>
+                                            <div className="flex justify-between items-center w-full">
+                                                <InputLabel sx={textFieldStyle}>Events</InputLabel>
+                                                <Button
+                                                    variant="contained"
+                                                    className="bg-base-gray rounded-md"
+                                                    onClick={() => setOpenAddEvent(true)}
+                                                >
+                                                    Add Event
+                                                </Button>
+                                            </div>
+                                            <div className='mt-3'>
+                                                <TableEventList elementId={id} />
+                                            </div>
+                                        </> :
+                                        <h3 className='m-2 text-center text-zinc-600'>
+                                            You can not add events here, since this element does not contain ID
+                                        </h3>
+                                    }
                                 </Grid>
                             </Grid>
                         </div>

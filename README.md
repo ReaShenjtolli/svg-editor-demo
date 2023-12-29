@@ -1,46 +1,29 @@
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
 In the project directory, you can run:
+### `yarn start`
 
-### `npm start`
+node version --> v21.4
+yarn version --> 1.22.21
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+User Story
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+User can add a svg to the "Add SVG" button. 
+On the right side, the list of svg elements will be displayed. 
+By left-clicking, the child elements of the SVG will be shown. 
+By right-clicking, the modal to edit SVG can be accessed. 
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Edit SVG modal. 
+In the edit section, the data of the selected element will be displayed (id, style, x, y, width, height). Below that, there is a table showing the respective added events. If there are no events, it will display 'No events found.' To add events, you need to use the 'Add events' button.
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Add events modal. 
+In the add events section, the ID of the element to which a new event will be added will be displayed. Below is a select option for the event type. There are three static events where the user can choose. If a specific event type has been selected for an element once, that event cannot be added again by becoming disabled.
+Below is a checkbox button checked by default. If the user leaves the button checked, then a default alert event is added. If unchecked, the event below must be added.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+After clicking the "Apply Changes" button, the event is added to the SVG element.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+The data is stored in localStorage. If the page is reloaded, the events are still added. If you want to delete an event, the delete button is active, as well as the edit event button.
 
-### `npm run eject`
+To remove the SVG, click on "Remove SVG"
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Appropriate validations have been made to prevent adding an event if the element does not have an ID.

@@ -18,7 +18,7 @@ function App() {
     }
     addEventsInSvg()
     setIsLoading(false);
-}, [fileContent]);
+  }, [fileContent]);
 
   function RenderSvg(props: { svg: string }) {
     return React.createElement('div', {
@@ -60,7 +60,9 @@ function App() {
         </Grid>
         <Grid xs={4}>
           {fileContent ?
-            <TreeView hasSVG={fileContent ? true : false} /> :
+            <TreeView
+              fileContent={fileContent}
+            /> :
             <p>Add SVG to load tree data file...</p>
           }
         </Grid>

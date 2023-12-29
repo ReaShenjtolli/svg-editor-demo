@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 import EditModal from './modals/EditModal';
 
 type TreeViewProps = {
-  hasSVG: boolean;
+  fileContent: string;
 };
 
 interface TreeNode {
@@ -26,7 +26,8 @@ function getTreeFromElement(element: Element): TreeNode {
   return tree;
 }
 
-const TreeView: React.FC<TreeViewProps> = ({ hasSVG }: TreeViewProps) => {
+const TreeView: React.FC<TreeViewProps> = ({ fileContent }: TreeViewProps) => {
+  const hasSVG = Boolean(fileContent)
 
   const [expandedNodes, setExpandedNodes] = useState<{ [key: string]: boolean }>({});
   const [treeData, setTreeData] = useState<TreeNode | null>(null);
@@ -42,7 +43,7 @@ const TreeView: React.FC<TreeViewProps> = ({ hasSVG }: TreeViewProps) => {
     const svgTree = getTreeFromElement(svgElement);
     setTreeData(svgTree)
 
-  }, [hasSVG]);
+  }, [fileContent]);
 
   const toggleNode = (id: string) => {
     setExpandedNodes(prev => ({
